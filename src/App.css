@@ -1,7 +1,20 @@
 .App {
-  text-align: center ;
+  font-family: sans-serif;
+  text-align: center;
 }
-/* Test comment */
+
+.redBorder {
+  border: 2px dotted red;
+}
+
+.shadow {
+  box-shadow: 1px 1px 6px 6px #ccc;
+}
+
+.topOffset {
+  margin-top: 1rem;
+}
+
 
 .App-logo {
   height: 40vmin;

@@ -48,7 +48,7 @@ function App() {
             for (var i = 0; i < stringArray.length; i++) {
                 floatArray.push(parseFloat(stringArray[i]));
             }
-
+            setData(finalArray)
         }
     };
 

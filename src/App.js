@@ -1,6 +1,20 @@
 import Header from "./components/Header";
 import React, {useState} from 'react';
 import ReactFileReader from 'react-file-reader';
+import ReactDOM from "react-dom";
+// import { Navbar, Col } from "materialize";
+import OneYearHeatMap from "./test_data/heatmaptest";
+import HeatMapDate from "react-d3-heatmap";
+import 'materialize-css/dist/css/materialize.min.css';
+
+import "./App.css";
+
+class data{
+    constructor(date, number){
+        this.date = date
+        this.count = number
+    }
+}
 
 function App() {
     const [selectedFile, setSelectedFile] = useState();
@@ -36,6 +50,7 @@ function App() {
             for(var i =0; i<stringArray.length;i++){
                 floatArray.push(parseFloat(stringArray[i]));
             }
+
         }
     };
 
@@ -57,7 +72,13 @@ function App() {
               <button onClick={handleSubmission}>Submit</button>
           </div>
           <Header title='Upload the time series data. The data must be in a .txt or .1D format.'/>
-      </div>
+          
+    <script src="https://d3js.org/d3.v4.js"></script>
+
+    <div id="my_dataviz"></div>
+    var input = document.getElementById("heatmap");
+    input.value = 1;
+    </div>
   )
 }
 

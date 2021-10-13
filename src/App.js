@@ -47,6 +47,7 @@ function App() {
             }
             var stringArray = reader.result.split('  ')
             var floatArray = []
+            console.log(finalArray)
             for(var i =0; i<stringArray.length;i++){
                 floatArray.push(parseFloat(stringArray[i]));
             }

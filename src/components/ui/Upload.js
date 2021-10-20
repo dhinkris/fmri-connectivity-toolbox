@@ -9,7 +9,7 @@ const Input = styled('input')({
     display: 'none',
 });
 
-function App() {
+function App(props) {
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
     const [data, setData] = useState([]);
@@ -43,7 +43,8 @@ function App() {
             for (var i = 0; i < stringArray.length; i++) {
                 floatArray.push(parseFloat(stringArray[i]));
             }
-            setData(finalArray)
+            // setData(finalArray)
+            props.handleUpdate(finalArray)
             console.log(data)
         }
     };

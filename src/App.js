@@ -2,11 +2,16 @@ import Header from "./components/Header";
 import React, { useState } from 'react';
 import ReactFileReader from 'react-file-reader';
 import HeatMap from './components/chart/HeatMap';
+import Slider from './components/Slider';
+
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { StyledEngineProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
+import ReactSlider from "react-slider";
+import {RangeStepInput} from 'react-range-step-input';
+import styles from './App.css'
 
 const Input = styled('input')({
     display: 'none',
@@ -14,6 +19,7 @@ const Input = styled('input')({
 
 
 function App() {
+    
     const [selectedFile, setSelectedFile] = useState();
     const [isFilePicked, setIsFilePicked] = useState(false);
     const [data, setData] = useState([]);
@@ -139,13 +145,16 @@ function App() {
             setData(finalArray)
         }
     };
-
+    
+   
 
     return (
         <StyledEngineProvider injectFirst>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box className={styles.App} sx={{ flexGrow: 1 }} >
                 <Grid container spacing={2}>
                     <Grid item xs={8}>
+                    {/* <Slider  /> */}
+
                         <label htmlFor="contained-button-file">
                             {/* <Input type="file" name="file" accept=".1D, .txt" onChange={changeHandler} /> */}
                             <Input accept=".1D" id="contained-button-file" multiple type="file" onChange={changeHandler} />
@@ -172,13 +181,16 @@ function App() {
 
                     
                     <Grid item xs={4}>
-                        {/* <HeatMap data={data} /> */}
+                    
+
                     </Grid>
                 </Grid>
             </Box>
 
         </StyledEngineProvider>
     )
+    
 }
+
 
 export default App;

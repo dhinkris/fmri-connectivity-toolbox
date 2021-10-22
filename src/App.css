@@ -1,6 +1,6 @@
 .App {
   font-family: sans-serif;
-  text-align: center;
+  text-align: center;  
 }
 
 .redBorder {
@@ -15,7 +15,9 @@
   margin-top: 1rem;
 }
 
-
+#root{
+  margin:100px;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

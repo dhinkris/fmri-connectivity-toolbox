@@ -13,6 +13,7 @@ class HeatMap extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log("Data given to HeatMap:")
         console.log(this.props.data)
         // set the dimensions and margins of the graph
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },

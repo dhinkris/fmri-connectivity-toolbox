@@ -16,7 +16,28 @@ class Timeseries extends React.Component {
         console.log("Data given to Timeseries:")
         console.log(this.props.data)
 
-        let roibase = this.props.data
+        let fileContentArray = this.props.data
+        var finalArray = []
+        for (var i = 0; i < fileContentArray.length; i++) {
+            var troi = fileContentArray[i].split('  ')
+            for (var j = 0; j < 200; j++) {
+                troi[j] = parseFloat(troi[j])
+            }
+            troi.pop()
+               
+            finalArray.push(troi)
+        }
+        var timebase = finalArray
+        var roibase = []
+        for(var i = 0; i<200; i++){
+            var temp = [];
+            roibase.push(temp);
+        }
+        for(var i = 0; i<timebase.length; i++){
+            for(var j = 0; j<200; j++){
+                roibase[j].push(timebase[i][j]) 
+            }
+        }
         function pearsonCorrelation(prefs, p1, p2) {
             // good code
             // for(var i = 0; i<89; i<100)
@@ -32,13 +53,8 @@ class Timeseries extends React.Component {
           
             var sum1 = 0;
             for (var i = 0; i < si.length; i++){
-                console.log('test')
-                console.log(prefs)
-                console.log(prefs[p1])
-                console.log(prefs[p1][si[i]])
                 sum1 += prefs[p1][si[i]];
             }
-            console.log(typeof sum1)
           
             var sum2 = 0;
             for (var i = 0; i < si.length; i++) sum2 += prefs[p2][si[i]];
@@ -70,9 +86,9 @@ class Timeseries extends React.Component {
             var correlation_array = []
       
       
-        for (var i = 0; i < 1; i++) {//for every timepoint
+        for (var i = 0; i < 200; i++) {//for every timepoint
             var h = []
-            for (var x =0; x < 1; x++) {//arrange each ROI in an array as a float
+            for (var x =0; x < 200; x++) {//arrange each ROI in an array as a float
                 var temp = []
                 temp.push(roibase[i])
                 temp.push(roibase[x])
@@ -85,10 +101,10 @@ class Timeseries extends React.Component {
         console.log(correlation_array)
         var finalArray = []
         var count = 0
-        for (var i = 0; i < 1; i++) {//for every timepoint
+        for (var i = 0; i < 200; i++) {//for every timepoint
             var temp = []
             var splitstring = correlation_array[i]
-            for (var x = 0; x < 1; x++) {//arrange each ROI in an array as a float
+            for (var x = 0; x < 200; x++) {//arrange each ROI in an array as a float
                 finalArray.push({ "group": "r" + i, variable: "c" + x, "value": splitstring[x] })
                 temp.push(splitstring[x])
                 count++;
@@ -103,10 +119,9 @@ class Timeseries extends React.Component {
         console.log("Data timeseries displays:")
         console.log(data)
 
-        // set the dimensions and margins of the graph
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },
-            width = 700 - margin.left - margin.right,
-            height = 450 - margin.top - margin.bottom;
+            width = 500 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
 
         // append the svg object to the body of the page
         // append the svg object to the body of the page
@@ -117,7 +132,6 @@ class Timeseries extends React.Component {
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        //Read the data
 
         // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
         const myGroups = Array.from(new Set(data.map(d => d.group)))
@@ -142,11 +156,19 @@ class Timeseries extends React.Component {
         svg.append("g")
             .call(d3.axisLeft(y));
 
+        svg.append("title")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Value vs Date Graph");
         // Build color scale
         var myColor = d3.scaleLinear()
-            //.range(["white", "#A52A2A"])
-            .range(["blue","green"])
-            .domain([-20, 20])
+            .range(["#0000ff", "#00ff00"])
+            .domain([-1, 1])
+        
+           
 
         svg.selectAll()
             .data(data, function (d) { return d.group + ':' + d.variable; })

@@ -15,6 +15,19 @@ class HeatMap extends React.Component {
     componentDidUpdate() {
         console.log("Data given to HeatMap:")
         console.log(this.props.data)
+        let fileContentArray = this.props.data
+        var finalArray = []
+            for (var i = 0; i < fileContentArray.length; i++) {//for every timepoint
+                var temp = []
+                var splitstring = fileContentArray[i].split('  ')//split ROIs
+                for (var x = 0; x < 200; x++) {//arrange each ROI in an array as a float
+                    finalArray.push({ "group": "r" + i, variable: "c" + x, "value": splitstring[x] })
+                    temp.push(parseFloat(splitstring[x]))
+                }
+                finalArray.push(temp)//array of each timepoint; each cell is an array of ROIs(floats)
+            }
+            var data = finalArray
+
         // set the dimensions and margins of the graph
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },
             width = 700 - margin.left - margin.right,
@@ -29,8 +42,6 @@ class HeatMap extends React.Component {
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        let data = this.props.data
-        //Read the data
 
         // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
         const myGroups = Array.from(new Set(data.map(d => d.group)))

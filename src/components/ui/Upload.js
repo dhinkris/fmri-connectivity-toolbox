@@ -28,24 +28,10 @@ function App(props) {
         reader.onload = function (e) {
             var fileContentArray = this.result.split(/\n/)//split every line
             fileContentArray.pop()
-            var finalArray = []
-            for (var i = 0; i < fileContentArray.length; i++) {//for every timepoint
-                var temp = []
-                var splitstring = fileContentArray[i].split('  ')//split ROIs
-                for (var x = 0; x < 200; x++) {//arrange each ROI in an array as a float
-                    finalArray.push({ "group": "r" + i, variable: "c" + x, "value": splitstring[x] })
-                    temp.push(parseFloat(splitstring[x]))
-                }
-                finalArray.push(temp)//array of each timepoint; each cell is an array of ROIs(floats)
-            }
-            var stringArray = reader.result.split('  ')
-            var floatArray = []
-            for (var i = 0; i < stringArray.length; i++) {
-                floatArray.push(parseFloat(stringArray[i]));
-            }
             // setData(finalArray)
-            props.handleUpdate(finalArray)
-            console.log(data)
+            console.log("Data from Upload:")
+            console.log(fileContentArray)
+            props.handleUpdate(fileContentArray)
         }
     };
 

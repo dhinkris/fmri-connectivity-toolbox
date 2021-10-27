@@ -57,8 +57,8 @@ class HeatMap extends React.Component {
 
         // Build color scale
         var myColor = d3.scaleLinear()
-            .range(["white", "#A52A2A"])
-            //.range(["blue","green"])
+            //.range(["white", "#A52A2A"])
+            .range(["blue","green"])
             .domain([-20, 20])
 
         svg.selectAll()

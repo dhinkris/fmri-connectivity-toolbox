@@ -1,5 +1,6 @@
 import Upload from './components/ui/Upload';
 import HeatMap from './components/chart/HeatMap';
+import Timeseries from './components/ui/Timeseries';
 import React from 'react';
 
 import Grid from '@mui/material/Grid';
@@ -36,6 +37,7 @@ class Layout extends React.Component {
                     </Grid>
                 </Box>
                 <HeatMap data={this.state.data} />
+                <Timeseries data={this.state.data}/>
 
             </StyledEngineProvider>
 

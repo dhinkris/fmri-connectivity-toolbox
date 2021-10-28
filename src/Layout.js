@@ -1,7 +1,8 @@
 import Upload from './components/ui/Upload';
-import HeatMap from './components/chart/HeatMap';
 import Timeseries from './components/ui/Timeseries';
+import Correlation from './components/ui/Correlation';
 import React from 'react';
+import Testing from './components/ui/Testing';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -34,9 +35,11 @@ class Layout extends React.Component {
                         <Grid item xs={12}>
                             <Upload handleUpdate={this.updateData} />
                         </Grid>
+                        <Grid item xs={12}>
+                            <Correlation data={this.state.data} />
+                        </Grid>
                     </Grid>
                 </Box>
-                <HeatMap data={this.state.data} />
                 <Timeseries data={this.state.data}/>
 
             </StyledEngineProvider>

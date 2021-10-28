@@ -3,6 +3,9 @@ import * as d3 from 'd3';
 import Grid from '@mui/material/Grid';
 
 class HeatMap extends React.Component {
+    state = {
+        data: []
+    }
     constructor(props) {
         super(props);
         this.myRef = React.createRef()
@@ -13,25 +16,14 @@ class HeatMap extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log("Data given to HeatMap:")
+        console.log('Data from UIs:')
         console.log(this.props.data)
-        let fileContentArray = this.props.data
-        var finalArray = []
-            for (var i = 0; i < fileContentArray.length; i++) {//for every timepoint
-                var temp = []
-                var splitstring = fileContentArray[i].split('  ')//split ROIs
-                for (var x = 0; x < 200; x++) {//arrange each ROI in an array as a float
-                    finalArray.push({ "group": "r" + i, variable: "c" + x, "value": splitstring[x] })
-                    temp.push(parseFloat(splitstring[x]))
-                }
-                finalArray.push(temp)//array of each timepoint; each cell is an array of ROIs(floats)
-            }
-            var data = finalArray
+        let data = this.props.data
 
         // set the dimensions and margins of the graph
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },
-            width = 700 - margin.left - margin.right,
-            height = 450 - margin.top - margin.bottom;
+            width = 500 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
 
         // append the svg object to the body of the page
         // append the svg object to the body of the page
@@ -66,11 +58,19 @@ class HeatMap extends React.Component {
         svg.append("g")
             .call(d3.axisLeft(y));
 
+        svg.append("title")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Value vs Date Graph");
         // Build color scale
         var myColor = d3.scaleLinear()
-            //.range(["white", "#A52A2A"])
-            .range(["blue","green"])
-            .domain([-20, 20])
+            .range(["#0000ff", "#00ff00"])
+            .domain([-1, 1])
+        
+           
 
         svg.selectAll()
             .data(data, function (d) { return d.group + ':' + d.variable; })

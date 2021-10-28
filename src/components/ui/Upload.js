@@ -29,8 +29,6 @@ function App(props) {
             var fileContentArray = this.result.split(/\n/)//split every line
             fileContentArray.pop()
             // setData(finalArray)
-            console.log("Data from Upload:")
-            console.log(fileContentArray)
             props.handleUpdate(fileContentArray)
         }
     };

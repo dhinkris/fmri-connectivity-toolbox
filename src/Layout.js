@@ -3,6 +3,7 @@ import Timeseries from './components/ui/Timeseries';
 import Correlation from './components/ui/Correlation';
 import React from 'react';
 import Testing from './components/ui/Testing';
+import Circos from './components/chart/Circos'
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -30,22 +31,22 @@ class Layout extends React.Component {
     render(){
         return(
             <StyledEngineProvider injectFirst>
+                test
                 <Box sx={{ flexGrow: 1 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Upload handleUpdate={this.updateData} />
                         </Grid>
                         <Grid item xs={12}>
-                            <Correlation data={this.state.data} />
                         </Grid>
                     </Grid>
                 </Box>
-                <Timeseries data={this.state.data}/>
-
+                <Circos data={this.state.data}/>
             </StyledEngineProvider>
 
         )
     }
 }
-
+//<Timeseries data={this.state.data}/>
+//<Correlation data={this.state.data} />
 export default Layout;

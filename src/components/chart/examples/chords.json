@@ -1,0 +1,14 @@
+[
+  {
+    "source": { "id": "chr19", "start": 0.45, "end": 0.55 },
+    "target": { "id": "chr17", "start": 0.45, "end": 0.55 }
+  },
+  {
+    "source": { "id": "chr4", "start": 0.45, "end": 0.55 },
+    "target": { "id": "chr1", "start": 0.45, "end": 0.55 }
+  },
+  {
+    "source": { "id": "chr12", "start": 0.45, "end": 0.55 },
+    "target": { "id": "chr22", "start": 0.45, "end": 0.55 }
+  }
+]

@@ -42,6 +42,7 @@ class Layout extends React.Component {
                     </Grid>
                 </Box>
                 <Circos data={this.state.data}/>
+                <Correlation data={this.state.data} />
             </StyledEngineProvider>
 
         )

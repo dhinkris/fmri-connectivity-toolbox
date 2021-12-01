@@ -35,9 +35,9 @@ class HeatMap extends React.Component {
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
-        // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
-        const myGroups = Array.from(new Set(data.map(d => d.group)))
-        const myVars = Array.from(new Set(data.map(d => d.variable)))
+        // Labels of row and columns -> unique identifier of the column called 'row' and 'column'
+        const myGroups = Array.from(new Set(data.map(d => d.row)))
+        const myVars = Array.from(new Set(data.map(d => d.column)))
 
         // Build X scales and axis:
         var x = d3.scaleBand()
@@ -73,11 +73,11 @@ class HeatMap extends React.Component {
            
 
         svg.selectAll()
-            .data(data, function (d) { return d.group + ':' + d.variable; })
+            .data(data, function (d) { return d.row + ':' + d.column; })
             .enter()
             .append("rect")
-            .attr("x", function (d) { return x(d.group) })
-            .attr("y", function (d) { return y(d.variable) })
+            .attr("x", function (d) { return x(d.row) })
+            .attr("y", function (d) { return y(d.column) })
             .attr("width", x.bandwidth())
             .attr("height", x.bandwidth())
             .style("fill", function (d) { return myColor(d.value) })

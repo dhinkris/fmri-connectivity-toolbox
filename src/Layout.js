@@ -3,7 +3,7 @@ import Timeseries from './components/ui/Timeseries';
 import Correlation from './components/ui/Correlation';
 import React from 'react';
 import Testing from './components/ui/Testing';
-import Circos from './components/chart/Circos'
+// import Circos from './components/chart/Circos'
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -84,7 +84,7 @@ class Layout extends React.Component {
                                         <Correlation data={this.state.data} />
                                     </Grid>
                                     <Grid item xs={8}>
-                                        <Circos data={this.state.data}/>
+                                        {/* <Circos data={this.state.data}/> */}
                                     </Grid>
                                 </Grid>
                                 : <h5>Upload data..</h5>

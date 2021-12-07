@@ -10,20 +10,11 @@ class HeatMap extends React.Component {
         super(props);
         this.myRef = React.createRef()
     }
-
-    componentDidMount() {
-        console.log(this.props.data)
-    }
-
-    componentDidUpdate() {
-        console.log('Data from UIs:')
-        console.log(this.props.data)
-        let data = this.props.data
-
+    renderElement=(data)=>{
         // set the dimensions and margins of the graph
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },
-            width = 500 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+            width = this.props.width - margin.left - margin.right,
+            height = this.props.height - margin.top - margin.bottom;
 
         // append the svg object to the body of the page
         // append the svg object to the body of the page
@@ -34,7 +25,37 @@ class HeatMap extends React.Component {
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+        var tooltip = d3.select(this.myRef.current)
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
 
+        var mouseover = function(d) {
+            tooltip
+                .style("opacity", 1)
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
+            }
+        var mousemove = function(d) {
+            tooltip
+                .html("The exact value of<br>this cell is: " + d.value)
+                .style("left", (d3.pointer(this)[0]+70) + "px")
+                .style("top", (d3.pointer(this)[1]) + "px")
+            }
+        var mouseleave = function(d) {
+            tooltip
+                .style("opacity", 0)
+            d3.select(this)
+                .style("stroke", "none")
+                .style("opacity", 0.8)
+            }
+            
         // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
         const myGroups = Array.from(new Set(data.map(d => d.group)))
         const myVars = Array.from(new Set(data.map(d => d.variable)))
@@ -43,7 +64,7 @@ class HeatMap extends React.Component {
         var x = d3.scaleBand()
             .range([0, width])
             .domain(myGroups)
-            .padding(0);
+            .padding(0.01);
         svg.append("g")
             .style("font-size", 15)
             .attr("transform", "translate(0," + height + ")")
@@ -54,23 +75,22 @@ class HeatMap extends React.Component {
         var y = d3.scaleBand()
             .range([height, 0])
             .domain(myVars)
-            .padding(0);
+            .padding(0.01);
         svg.append("g")
             .call(d3.axisLeft(y));
 
         svg.append("title")
-        .attr("x", (width / 2))             
-        .attr("y", 0 - (margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .style("text-decoration", "underline")  
-        .text("Value vs Date Graph");
+            .attr("x", (width / 2))
+            .attr("y", 0 - (margin.top / 2))
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("text-decoration", "underline")
+            .text("Value vs Date Graph");
+            
         // Build color scale
         var myColor = d3.scaleLinear()
             .range(["#0000ff", "#00ff00"])
             .domain([-1, 1])
-        
-           
 
         svg.selectAll()
             .data(data, function (d) { return d.group + ':' + d.variable; })
@@ -79,18 +99,32 @@ class HeatMap extends React.Component {
             .attr("x", function (d) { return x(d.group) })
             .attr("y", function (d) { return y(d.variable) })
             .attr("width", x.bandwidth())
-            .attr("height", x.bandwidth())
+            .attr("height", y.bandwidth())
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
             .style("fill", function (d) { return myColor(d.value) })
-
+        
+        svg.append("text")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("text-anchor", "left")
+            .style("font-size", "22px")
+            .text(this.props.title);   
+        
+    }
+    componentDidMount() {
+        this.renderElement(this.props.data)
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        this.myRef = React.createRef()
+        if (prevProps.data!==this.props.data){
+            this.renderElement(this.props.data)
+        }
+    }
     render() {
-        return (
-            <>
-                <Grid item xs={8} ref={this.myRef}>
-                    </Grid>
-            </>
-        )
+        return (<svg ref={this.myRef} width={this.props.width} height={this.props.height}></svg>)
     }
 }
 

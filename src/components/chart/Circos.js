@@ -149,7 +149,7 @@ class ChordsTest extends React.Component{
         for (var roi = 1; roi <= nodes; roi++) {
             var end = 2*Math.PI*roi/nodes
             var start = (end)-2*Math.PI/nodes
-            console.log(end,start)
+            // console.log(end,start)
             _layout.push({
                 "id":roi.toString(),
                 "label":roi.toString(),
@@ -159,18 +159,18 @@ class ChordsTest extends React.Component{
                 "start":start,
                 "end":end})
         }
-        console.log("testing")
-        console.log(_layout)
+        // console.log("testing")
+        // console.log(_layout)
         this.setState({
             layout: _layout
         })
-        console.log(_layout)
+        // console.log(_layout)
 
     }
     render(){
         const { layout, chords} = this.state
-        console.log("from file")
-        console.log(layout)
+        // console.log("from file")
+        // console.log(layout)
         
         return(
             <>

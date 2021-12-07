@@ -2,27 +2,30 @@ import React from "react";
 import * as d3 from 'd3';
 import Grid from '@mui/material/Grid';
 import Heatmap from "../chart/HeatMap";
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 
 class Correlation extends React.Component {
     state = {
         data: []
     }
     constructor(props) {
+        // console.log("Constructor")
         super(props);
-        this.myRef = React.createRef()
+        // this.myRef = React.createRef()
     }
 
     componentDidMount() {
-        console.log(this.props.data)
+        // console.log(this.props.data)
     }
 
-    componentDidUpdate() {
-
+    componentDidMount() {
         let fileContentArray = this.props.data
+        
         var finalArray = []
         for (var i = 0; i < fileContentArray.length; i++) {
             var troi = fileContentArray[i].split('  ')
-            for (var j = 0; j < 200; j++) {
+            for (var j = 0; j < troi.length-1; j++) {
                 troi[j] = parseFloat(troi[j])
             }
             troi.pop()
@@ -104,22 +107,26 @@ class Correlation extends React.Component {
                 finalArray.push({ "group": "r" + i, variable: "c" + x, "value": splitstring[x] })
                 temp.push(splitstring[x])
                 count++;
-                if(count == 36009){
-                }
             }
             // finalArray.push(temp)//array of each timepoint; each cell is an array of ROIs(floats)
         }
-        this.state.data = finalArray
-        console.log("Correlation data:")
-        console.log(this.state.data)
+        this.setState({
+            data: finalArray,
+            minVal: Math.min(parseFloat(fileContentArray)),
+            maxVal: Math.min(parseFloat(fileContentArray))
+        })
+        // console.log("Correlation data:")
+        // console.log(this.state.data)
     }
     render() {
-        return (
-            <>
-                <Grid item xs={8} ref={this.myRef}>
-                    <Heatmap data={this.state.data}/>
-                </Grid>
-            </>
+        return ( (this.state.data.length > 0 && this.state.data) ?
+            <Heatmap data={this.state.data} 
+                    width={500} 
+                    height={500} 
+                    minVal={this.state.minVal}
+                    maxVal={this.state.maxVal}
+                    title="Correlation" />: 
+            <Box sx={{ display: 'flex' }}> <CircularProgress /> </Box>
         )
     }
 }

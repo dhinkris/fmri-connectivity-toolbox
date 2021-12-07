@@ -94,8 +94,6 @@ class ChordsTest extends React.Component{
           else{regions_dict[regions[index]]=[index]}
         }
         const isEqual = (element) => element == 12;
-        console.log(correlation_array)
-        console.log(regions_dict)
         for(var index=0; index<correlation_array.length; index++){
           if(correlation_array[index]['value']>=0.9 && correlation_array[index]['value']<=1){
             var temp = correlation_array[index]

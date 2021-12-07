@@ -16,9 +16,7 @@ class Correlation extends React.Component {
         // this.myRef = React.createRef()
     }
 
-    componentDidMount() {
-        // console.log(this.props.data)
-    }
+
 
     componentDidMount() {
         let fileContentArray = this.props.data

@@ -29,10 +29,16 @@ class Correlation extends React.Component {
         // console.log("Correlation data:")
         // console.log(this.state.data)
     }
-    componentDidUpdate() {
-        // this.state.data = correlationFunction.calculateCorrelation(this.props.data);
-        // console.log('testing calculateCorrelation')
-        // console.log(this.state.data)
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.data !== this.props.data) {
+            let fileContentArray = this.props.data
+            const finalArray = computeCorrelation(fileContentArray)
+            this.setState({
+                data: finalArray,
+                minVal: Math.min(parseFloat(fileContentArray)),
+                maxVal: Math.min(parseFloat(fileContentArray))
+            })
+        }
     }
     render() {
         return ( (this.state.data.length > 0 && this.state.data) ?

@@ -7,8 +7,7 @@ class HeatMap extends React.Component {
         super(props);
         this.myRef = React.createRef()
     }
-
-    componentDidMount() {
+    updateHeatMap() {
         // set the dimensions and margins of the graph
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },
             width = this.props.width - margin.left - margin.right,
@@ -23,9 +22,9 @@ class HeatMap extends React.Component {
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        let data = this.props.data
+       
         //Read the data
-
+        let data=this.props.data
         // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
         const myGroups = Array.from(new Set(data.map(d => d.group)))
         const myVars = Array.from(new Set(data.map(d => d.variable)))
@@ -65,9 +64,14 @@ class HeatMap extends React.Component {
             .attr("height", x.bandwidth())
             .style("fill", function (d) { return myColor(d.value) })
     }
+    componentDidMount() {
+        this.updateHeatMap()
+    }
 
-    componentDidUpdate() {
-
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.data!==this.props.data){
+            this.updateHeatMap(this.props.data)
+        }
     }
 
     render() {

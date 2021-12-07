@@ -13,7 +13,7 @@ class Timeseries extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
+    updateTimeSeries=()=>{
         let fileContentArray = this.props.data
         var finalArray = []
         for (var i = 0; i < fileContentArray.length; i++) {//for every timepoint
@@ -26,8 +26,17 @@ class Timeseries extends React.Component {
         this.setState({
             data: finalArray
         })
-
     }
+    componentDidMount() {
+        this.updateTimeSeries()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.data!==this.props.data){
+            this.updateTimeSeries()
+        }
+    }
+
     render() {
         return (
             (this.state.data.length > 0 && this.state.data) ?

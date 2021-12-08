@@ -44,7 +44,7 @@ class HeatMap extends React.Component {
         var y = d3.scaleBand()
             .range([height, 0])
             .domain(myVars)
-            .padding(0);
+            .padding(0.01);
         svg.append("g")
             .call(d3.axisLeft(y));
 

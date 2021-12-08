@@ -3,7 +3,8 @@ import Timeseries from './components/ui/Timeseries';
 import Correlation from './components/ui/Correlation';
 import React from 'react';
 import Testing from './components/ui/Testing';
-// import Circos from './components/chart/Circos'
+import BrainVolume from './components/ui/BrainVolume'
+import Circos from './components/ui/CircosConnectivity'
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -74,22 +75,22 @@ class Layout extends React.Component {
                                 </Grid>
                             </Grid>
                         </Box>
-                        {
-                            this.state.data.length > 0 ?
-                                <Grid container spacing={2}>
-                                    <Grid item xs={8}>
-                                        <Timeseries data={this.state.data} />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Correlation data={this.state.data} />
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        {/* <Circos data={this.state.data}/> */}
-                                    </Grid>
-                                </Grid>
-                                : <h5>Upload data..</h5>
-                        }
-
+                        <Grid container spacing={2}>
+                            <Grid item xs={8}>
+                                <Timeseries data={this.state.data} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Correlation data={this.state.data} />
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Circos data={this.state.data}/>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <BrainVolume data={this.state.data}/>
+                            </Grid>
+                        </Grid>
                     </Container>
                 </ThemeProvider>
             </Stack>

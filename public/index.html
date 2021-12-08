@@ -29,7 +29,6 @@
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
-
       Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
@@ -43,87 +42,15 @@
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
-
       You can add webfonts, meta tags, or analytics to this file.
       The build step will place the bundled scripts into the <body> tag.
-
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!DOCTYPE html>
     <meta charset="utf-8">
-    
-    <!-- Load d3.js -->
-    <script src="https://d3js.org/d3.v4.js"></script>
-    
-    <!-- Create a div where the graph will take place -->
-    <div id="my_dataviz"></div>
-    
-    <script>
-    
-    // set the dimensions and margins of the graph
-    var margin = {top: 30, right: 30, bottom: 30, left: 30},
-      width = 450 - margin.left - margin.right,
-      height = 450 - margin.top - margin.bottom;
-    const data = {"data":[[1],[2],[3],[4],[5]]};
-    // append the svg object to the body of the page
-    var svg = d3.select("#my_dataviz")
-    .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-    
-    // Labels of row and columns
-    var rows = [];
-    var cols = [];
-    var chartData = [];
-    data.data.forEach((item, c) => {
-      cols.push(c);
-      data.data.forEach((itm, r) => {
-        chartData.push({ row: r, col: c, value: itm });
-        rows.unshift(r);
-      });
-    });
-    
-    
-    // Build X scales and axis:
-    var x = d3.scaleBand()
-      .range([ 0, width ])
-      .domain(cols)
-      .padding(0.01);
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x))
-    
-    // Build X scales and axis:
-    var y = d3.scaleBand()
-      .range([ height, 0 ])
-      .domain(rows)
-      .padding(0.01);
-    svg.append("g")
-      .call(d3.axisLeft(y));
-    
-    // Build color scale
-    var myColor = d3.scaleLinear()
-      .range(['red', 'yellow'])
-      .domain([0,4])
-    console.log(chartData);
-    //Read the data
-      svg.selectAll()
-          .data(chartData, function(d) {return d.row+':'+d.col;})
-          .enter()
-          .append("rect")
-          .attr("x", function(d) { return x(d.col) })
-          .attr("y", function(d) { return y(d.row) })
-          .attr("width", x.bandwidth() )
-          .attr("height", y.bandwidth() )
-          .style("fill", function(d) { return myColor(Math.abs(d.row-d.col))} )
-    
-    
-    </script>
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
   </body>

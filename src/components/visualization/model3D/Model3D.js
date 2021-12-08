@@ -6,6 +6,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 let scene, camera, r, spheres, controls, node_pos, loader;
 function init() {
+    const domElement = document.getElementById("r1");
     scene = new THREE.Scene();
     // camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 100 );
     camera = new THREE.PerspectiveCamera(
@@ -17,7 +18,7 @@ function init() {
     scene.add(directionalLight);
     r = new THREE.WebGLRenderer({ antialias: true });
     r.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(r.domElement);
+    domElement.appendChild(r.domElement);
     camera.position.z = 4;
     //    const texture = new THREE.TextureLoader().load( "redmetal.jpg" );
 
@@ -78,8 +79,6 @@ function init() {
     // sphere.receiveShadow = false; //default
     // scene.add( sphere );
 
-
-
     ///
     spheres = [];
     if (!(typeof node_pos === 'undefined') && !(node_pos === null)) {
@@ -94,13 +93,13 @@ function init() {
         }
         for (var i = 0; i < spheres.length; i++)
             console.log("");
-        //  scene.add( spheres[i] );
+        scene.add( spheres[i] );
 
     }
     const geometry6 = new THREE.CylinderGeometry(5, 5, 20, 32);
     const material6 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     const cylinder6 = new THREE.Mesh(geometry6, material6);
-    scene.add(cylinder6);
+    scene.add(spheres);
     controls = new OrbitControls(camera, r.domElement);
 }
 function onWindowResize() {
@@ -119,7 +118,6 @@ class BV extends React.Component {
 
     componentDidMount() {
         var fileContentArray = this.props.data;
-        console.log(fileContentArray);
         var nodes = []
         for (var i = 0; i < fileContentArray.length; i++) {
             var temp = fileContentArray[i].split('\t');
@@ -148,7 +146,7 @@ class BV extends React.Component {
     render() {
         return (
             <>
-                <div>
+                <div style={{border: '1px solid #38FFD8', width: "100%",  height:600, display:'block', position:'absolute'}} id='r1'></div>
                     {/* <script> */}
                     {/* {
                 array.map((data)=>{
@@ -159,8 +157,6 @@ class BV extends React.Component {
               } */}
 
                     {/* </script> */}
-                </div>
-
             </>
         )
     }

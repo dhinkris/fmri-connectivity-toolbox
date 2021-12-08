@@ -9,12 +9,12 @@ class Testing extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.data)
+        // console.log(this.props.data)
     }
 
     componentDidUpdate() {
-        console.log("Data given to Testing:")
-        console.log(this.props.data)
+        // console.log("Data given to Testing:")
+        // console.log(this.props.data)
 
         let fileContentArray = this.props.data
         var finalArray = []
@@ -106,8 +106,8 @@ class Testing extends React.Component {
             // finalArray.push(temp)//array of each timepoint; each cell is an array of ROIs(floats)
         }
         var data = finalArray
-        console.log("Final data to heatmap(testing):")
-        console.log(data)
+        // console.log("Final data to heatmap(testing):")
+        // console.log(data)
 
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },
             width = 500 - margin.left - margin.right,

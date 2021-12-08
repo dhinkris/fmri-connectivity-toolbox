@@ -5,9 +5,9 @@ import regions from './examples/example_regions.json'
 import layout from './examples/GRCh37.json';
 import chords from './examples/chords.json';
 import { range } from 'd3-array';
-import { HEATMAP, TRACK_TYPES } from 'react-circos/build/tracks';
-const correlationFunction = require("../ui/correlationFunction");
-const dictionaryForEach = require("../ui/dictionaryForEach");
+import { HEATMAP, TRACK_TYPES } from 'react-circos/build/tracks'
+import correlationFunction from "../ui/correlationFunction"
+import dictionaryForEach from "../ui/dictionaryForEach"
 
 const size = 800;//size of circle
 const start_chord = 0.45//where the chords start on the edges(0-1)
@@ -94,8 +94,6 @@ class ChordsTest extends React.Component{
           else{regions_dict[regions[index]]=[index]}
         }
         const isEqual = (element) => element == 12;
-        console.log(correlation_array)
-        console.log(regions_dict)
         for(var index=0; index<correlation_array.length; index++){
           if(correlation_array[index]['value']>=0.9 && correlation_array[index]['value']<=1){
             var temp = correlation_array[index]

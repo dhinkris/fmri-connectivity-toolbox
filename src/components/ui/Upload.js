@@ -38,7 +38,7 @@ function App(props) {
         <StyledEngineProvider injectFirst>
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={8}>
+                    <Grid item xs={4}>
                         <label htmlFor="contained-button-file">
                             {/* <Input type="file" name="file" accept=".1D, .txt" onChange={changeHandler} /> */}
                             <Input accept=".1D" id="contained-button-file" multiple type="file" onChange={changeHandler} />

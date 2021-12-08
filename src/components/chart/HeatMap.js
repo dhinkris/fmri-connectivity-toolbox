@@ -3,27 +3,15 @@ import * as d3 from 'd3';
 import Grid from '@mui/material/Grid';
 
 class HeatMap extends React.Component {
-    state = {
-        data: []
-    }
     constructor(props) {
         super(props);
         this.myRef = React.createRef()
     }
-
-    componentDidMount() {
-        console.log(this.props.data)
-    }
-
-    componentDidUpdate() {
-        console.log('Data from UIs:')
-        console.log(this.props.data)
-        let data = this.props.data
-
+    updateHeatMap() {
         // set the dimensions and margins of the graph
         const margin = { top: 0, right: 0, bottom: 0, left: 0 },
-            width = 500 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+            width = this.props.width - margin.left - margin.right,
+            height = this.props.height - margin.top - margin.bottom;
 
         // append the svg object to the body of the page
         // append the svg object to the body of the page
@@ -34,10 +22,12 @@ class HeatMap extends React.Component {
             .append("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-
-        // Labels of row and columns -> unique identifier of the column called 'row' and 'column'
-        const myGroups = Array.from(new Set(data.map(d => d.row)))
-        const myVars = Array.from(new Set(data.map(d => d.column)))
+       
+        //Read the data
+        let data=this.props.data
+        // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
+        const myGroups = Array.from(new Set(data.map(d => d.group)))
+        const myVars = Array.from(new Set(data.map(d => d.variable)))
 
         // Build X scales and axis:
         var x = d3.scaleBand()
@@ -58,37 +48,36 @@ class HeatMap extends React.Component {
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        svg.append("title")
-        .attr("x", (width / 2))             
-        .attr("y", 0 - (margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .style("text-decoration", "underline")  
-        .text("Value vs Date Graph");
         // Build color scale
         var myColor = d3.scaleLinear()
-            .range(["#0000ff", "#00ff00"])
+            .range(["white", "#A52A2A"])
+            //.range(["blue","green"])
             .domain([-1, 1])
-        
-           
 
         svg.selectAll()
-            .data(data, function (d) { return d.row + ':' + d.column; })
+            .data(data, function (d) { return d.group + ':' + d.variable; })
             .enter()
             .append("rect")
-            .attr("x", function (d) { return x(d.row) })
-            .attr("y", function (d) { return y(d.column) })
+            .attr("x", function (d) { return x(d.group) })
+            .attr("y", function (d) { return y(d.variable) })
             .attr("width", x.bandwidth())
             .attr("height", x.bandwidth())
             .style("fill", function (d) { return myColor(d.value) })
+    }
+    componentDidMount() {
+        this.updateHeatMap()
+    }
 
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.data!==this.props.data){
+            this.updateHeatMap(this.props.data)
+        }
     }
 
     render() {
         return (
             <>
-                <Grid item xs={8} ref={this.myRef}>
-                    </Grid>
+                <svg item xs={8} ref={this.myRef} width={this.props.width} height={this.props.height}> </svg>
             </>
         )
     }

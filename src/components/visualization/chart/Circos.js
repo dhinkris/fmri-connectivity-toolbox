@@ -8,7 +8,7 @@ import { range } from 'd3-array';
 import { HEATMAP, TRACK_TYPES } from 'react-circos/build/tracks'
 import correlationFunction from "../../helpers/correlationFunction"
 import dictionaryForEach from "../../helpers/dictionaryForEach"
-
+import { degree, betweeness_centrality} from "../../helpers/metrics"
 const size = 800;//size of circle
 const start_chord = 0.45//where the chords start on the edges(0-1)
 const end_chord = .55//where the chords end on the edges(0-1)
@@ -70,6 +70,11 @@ class ChordsTest extends React.Component {
       }
     }
     var correlation_array = correlationFunction.calculateCorrelation(this.props.data)
+    const threshold = 0.9
+    var degree_array = degree(correlation_array, regions, threshold);
+    /*console.log("to tracks:")
+    console.log(_regions)
+    console.log(degree_array)*/
     var new_chords = []
     //console.log("testing correlation_array")
     //console.log(correlation_array.length)
@@ -80,7 +85,7 @@ class ChordsTest extends React.Component {
     }
     const isEqual = (element) => element == 12;
     for (var index = 0; index < correlation_array.length; index++) {
-      if (correlation_array[index]['value'] >= 0.9 && correlation_array[index]['value'] <= 1) {
+      if (correlation_array[index]['value'] >= threshold && correlation_array[index]['value'] <= 1) {
         var temp = correlation_array[index]
         var startNode = correlation_array[index]["row"]
         var endNode = correlation_array[index]["column"]
@@ -116,7 +121,8 @@ class ChordsTest extends React.Component {
     this.setState({
       layout: _layout,
       regions: _regions,
-      chords: new_chords
+      chords: new_chords,
+      degrees: degree_array
     })
   }
   componentDidMount() {
@@ -130,7 +136,7 @@ class ChordsTest extends React.Component {
     }
   }
   render() {
-    const { layout, chords, regions } = this.state
+    const { layout, chords, regions, degrees } = this.state
     //console.log("from file")
     //console.log(layout)
     //console.log(chords)
@@ -173,13 +179,24 @@ class ChordsTest extends React.Component {
                 type: HEATMAP,
                 data: regions,
                 config: {
-                  innerRadius: 0.8,
-                  outerRadius: .98,
+                  innerRadius: 0.72,
+                  outerRadius: 0.88,
                   logScale: false,
                   color: 'YlGnBu',
                   //tooltipContent: {"block_id":"id "},
                 },
-              }]}
+              },
+            {
+              type: HEATMAP,
+              data: degrees,
+              config: {
+                innerRadius: 0.90,
+                outerRadius: 0.98,
+                logScale: false,
+                color: 'YlGnBu',
+                //tooltipContent: {"block_id":"id "},
+              },
+            }]}
               size={900}
             /> : null
         }

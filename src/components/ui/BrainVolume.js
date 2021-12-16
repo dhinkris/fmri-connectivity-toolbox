@@ -16,10 +16,10 @@ class BrainVolume extends React.Component {
             })
         }
     }
-    
+
     render(){
-        const { data } = this.state
-        return(
+        const {data} = this.props
+        return (
             <>
                 {
                     data && data.length>0? <Model3D data={data} />: null

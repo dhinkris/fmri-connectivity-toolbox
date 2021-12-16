@@ -11,12 +11,6 @@ import colorPresentation from "../../helpers/colorPresets"
 import Stats from 'stats-js'
 import * as dat from 'dat.gui';
 
-// function onWindowResize() {
-//     camera.aspect = window.innerWidth / window.innerHeight;
-//     camera.updateProjectionMatrix();
-//     r.setSize(window.innerWidth, window.innerHeight);
-// }
-// window.addEventListener('resize', onWindowResize, false);
 class BV extends React.Component {
 
     constructor(props) {
@@ -201,13 +195,13 @@ class BV extends React.Component {
             })
             const geometry = new THREE.SphereGeometry(2, 20, 20);
             const material = new THREE.MeshStandardMaterial({
-                color: 0x000000,
+                color: 0x0000ff,
                 // metalness: params.roughness,
                 // roughness: params.metalness,
-                // shininess: 200,
+                shininess: 200,
                 // envMapIntensity: 1.0,
-                transparent: true,
-                opacity: 0.1
+                // transparent: true,
+                // opacity: 0.1
             });
             const sphere = new THREE.Mesh(geometry, material);
             sphere.scale.set(1, 1, 1);
@@ -264,29 +258,29 @@ class BV extends React.Component {
             }
         })
 
-        nodeCoordinates.split('\r\n').map((coord, i) => {
-            let each_node = []
-            coord.split('  ').map((c) => {
-                each_node.push(parseFloat(c))
-            })
-            const geometry = new THREE.SphereGeometry(degree[i]/4, 20, 20);
-            const material = new THREE.MeshStandardMaterial({
-                color: new THREE.Color("rgb("+colorPresentation[example[i]]['color'][0]+", "+colorPresentation[example[i]]['color'][1]+", "+colorPresentation[example[i]]['color'][2]+")"),
-                // metalness: params.roughness,
-                // roughness: params.metalness,
-                shininess: 200,
-                // envMapIntensity: 1.0
-            });
-            const sphere = new THREE.Mesh(geometry, material);
-            sphere.scale.set(1, 1, 1);
-            sphere.position.set(each_node[0], each_node[1], each_node[2])
-            scene.add(sphere)
-            // if (n == 3) {
+        // nodeCoordinates.split('\r\n').map((coord, i) => {
+        //     let each_node = []
+        //     coord.split('  ').map((c) => {
+        //         each_node.push(parseFloat(c))
+        //     })
+        //     const geometry = new THREE.SphereGeometry(degree[i]/4, 20, 20);
+        //     const material = new THREE.MeshStandardMaterial({
+        //         color: new THREE.Color("rgb("+colorPresentation[example[i]]['color'][0]+", "+colorPresentation[example[i]]['color'][1]+", "+colorPresentation[example[i]]['color'][2]+")"),
+        //         // metalness: params.roughness,
+        //         // roughness: params.metalness,
+        //         shininess: 200,
+        //         // envMapIntensity: 1.0
+        //     });
+        //     const sphere = new THREE.Mesh(geometry, material);
+        //     sphere.scale.set(1, 1, 1);
+        //     sphere.position.set(each_node[0], each_node[1], each_node[2])
+        //     scene.add(sphere)
+        //     // if (n == 3) {
                 
-                // n = 0
-            // }
-            n += 1
-        })
+        //         // n = 0
+        //     // }
+        //     n += 1
+        // })
 
         const axis1=new THREE.AxesHelper( 10 * 5 )
         scene.add(axis1);

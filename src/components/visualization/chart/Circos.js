@@ -8,7 +8,7 @@ import { range } from 'd3-array';
 import { HEATMAP, TRACK_TYPES } from 'react-circos/build/tracks'
 import correlationFunction from "../../helpers/correlationFunction"
 import dictionaryForEach from "../../helpers/dictionaryForEach"
-// import { degree, betweeness_centrality} from "../../helpers/metrics"
+import { degree, betweeness_centrality} from "../../helpers/metrics"
 const size = 800;//size of circle
 const start_chord = 0.45//where the chords start on the edges(0-1)
 const end_chord = .55//where the chords end on the edges(0-1)
@@ -71,7 +71,7 @@ class ChordsTest extends React.Component {
     }
     var correlation_array = correlationFunction.calculateCorrelation(this.props.data)
     const threshold = 0.9
-    // var degree_array = degree(correlation_array, regions, threshold);
+    var degree_array = degree(correlation_array, regions, threshold);
     /*console.log("to tracks:")
     console.log(_regions)
     console.log(degree_array)*/
@@ -122,7 +122,7 @@ class ChordsTest extends React.Component {
       layout: _layout,
       regions: _regions,
       chords: new_chords,
-      // degrees: degree_array
+      degrees: degree_array
     })
   }
   componentDidMount() {

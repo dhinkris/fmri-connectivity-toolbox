@@ -2,111 +2,20 @@ import React from "react";
 import * as d3 from 'd3';
 import Grid from '@mui/material/Grid';
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
-let scene, camera, r, spheres, controls, node_pos, loader;
-function init() {
-    const domElement = document.getElementById("r1");
-    scene = new THREE.Scene();
-    // camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 100 );
-    camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000);
-    const directionalLight = new THREE.DirectionalLight(0x00ff00, 0.7);
-    scene.add(directionalLight);
-    r = new THREE.WebGLRenderer({ antialias: true });
-    r.setSize(window.innerWidth, window.innerHeight);
-    domElement.appendChild(r.domElement);
-    camera.position.z = 4;
-    //    const texture = new THREE.TextureLoader().load( "redmetal.jpg" );
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
+import node from '../../../test_data/tcorr_cluster_100ROIs_per_hemi_com_coordinates.txt'
+import correlationFunction from "../../helpers/correlationFunction"
+import example from "../chart/examples/example_regions.json"
+import colorPresentation from "../../helpers/colorPresets"
+import Stats from 'stats-js'
+import * as dat from 'dat.gui';
 
-    // const material = new THREE.MeshBasicMaterial({map:texture});
-    // const loader = new STLLoader();
-    // loader.load('C:\Users\Ashwin\OneDrive\Desktop\DBI\fmri-connectivity-toolbox\src\Cube_3d_printing_sample.stl', function (geometry) {
-
-    //     const material = new THREE.MeshPhongMaterial({ color: 0xff5533, specular: 0x111111, shininess: 200 });
-    //     const mesh = new THREE.Mesh(geometry, material);
-
-    //     mesh.position.set(0, 0, 0);
-    //     mesh.rotation.set(0, 0, 0);
-    //     mesh.scale.set(10, 10, 10);
-
-    //     mesh.castShadow = true;
-    //     mesh.receiveShadow = true;
-
-    //     scene.add(mesh);
-
-    // });
-    const geometry = new THREE.SphereGeometry(3, 32, 16);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-    ///
-    r.shadowMap.enabled = true;
-    r.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-
-    //Create a DirectionalLight and turn on shadows for the light
-    const light = new THREE.DirectionalLight(0xffffff, 1, 100);
-    light.position.set(0, 0, 100); //default; light shining from top
-    light.castShadow = true; // default false
-    scene.add(light);
-    light.shadow.mapSize.width = 512; // default
-    light.shadow.mapSize.height = 512; // default
-    light.shadow.camera.near = 0.5; // default
-    light.shadow.camera.far = 500; // default
-    const helper = new THREE.CameraHelper(light.shadow.camera);
-    scene.add(helper);
-
-    const light2 = new THREE.DirectionalLight(0xffffff, 1, 100);
-    light2.position.set(0, 0, -100); //default; light shining from top
-    light2.castShadow = true; // default false
-    scene.add(light2);
-    light2.shadow.mapSize.width = 512; // default
-    light2.shadow.mapSize.height = 512; // default
-    light2.shadow.camera.near = 0.5; // default
-    light2.shadow.camera.far = 500; // default
-    const helper2 = new THREE.CameraHelper(light2.shadow.camera);
-    scene.add(helper2);
-
-    const light3 = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
-    scene.add(light3);
-
-    //Create a sphere that cast shadows (but does not receive them)
-    const sphereGeometry = new THREE.SphereGeometry(3, 32, 32);
-    const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-    // const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-    // sphere.castShadow = true; //default is false
-    // sphere.receiveShadow = false; //default
-    // scene.add( sphere );
-
-    ///
-    spheres = [];
-    if (!(typeof node_pos === 'undefined') && !(node_pos === null)) {
-        for (var i = 0; i < node_pos.length; i++) {
-            const temp_sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            temp_sphere.castShadow = true; //default is false
-            temp_sphere.receiveShadow = false; //default
-            spheres.push(temp_sphere);
-            spheres[i].position.x += node_pos[i][0];
-            spheres[i].position.y += node_pos[i][1];
-            spheres[i].position.z += node_pos[i][2];
-        }
-        for (var i = 0; i < spheres.length; i++)
-            console.log("");
-        scene.add( spheres[i] );
-
-    }
-    const geometry6 = new THREE.CylinderGeometry(5, 5, 20, 32);
-    const material6 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-    const cylinder6 = new THREE.Mesh(geometry6, material6);
-    scene.add(spheres);
-    controls = new OrbitControls(camera, r.domElement);
-}
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    r.setSize(window.innerWidth, window.innerHeight);
-}
+// function onWindowResize() {
+//     camera.aspect = window.innerWidth / window.innerHeight;
+//     camera.updateProjectionMatrix();
+//     r.setSize(window.innerWidth, window.innerHeight);
+// }
 // window.addEventListener('resize', onWindowResize, false);
 class BV extends React.Component {
 
@@ -116,39 +25,300 @@ class BV extends React.Component {
         this.myRef = React.createRef()
     }
 
-    componentDidMount() {
-        var fileContentArray = this.props.data;
-        var nodes = []
-        for (var i = 0; i < fileContentArray.length; i++) {
-            var temp = fileContentArray[i].split('\t');
-            for (var j = 0; j < 3; j++) {
-                temp[j] = parseFloat(temp[j]);
-            }
-            temp.pop();
-            temp.pop();
-            nodes.push(temp);
-        }
-        node_pos = nodes;
+    async componentDidMount() {
+        let camera, scene, renderer, lightHelper,  cameraHelper, controlsPerspective, cameraOrtho, cameraPerspective;
+
+        const params = {
+            clipIntersection: true,
+            planeConstant: 0,
+            showHelpers: false, 
+            scale: 1,
+            lowerThreshold: 0.8,
+            upperThreshold: 0.9
+        };
+
+        const clipPlanes = [
+            new THREE.Plane(new THREE.Vector3(1, 0, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, - 1, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, 0, - 1), 0)
+        ];
+
         init();
 
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            r.render(scene, camera);
+        function addShadowedLight( x, y, z, color, intensity ) {
+
+            const directionalLight = new THREE.DirectionalLight( color, intensity );
+            directionalLight.position.set( x, y, z );
+            scene.add( directionalLight );
+
+            directionalLight.castShadow = true;
+
+            const d = 1;
+            directionalLight.shadow.camera.left = - d;
+            directionalLight.shadow.camera.right = d;
+            directionalLight.shadow.camera.top = d;
+            directionalLight.shadow.camera.bottom = - d;
+
+            directionalLight.shadow.camera.near = 1;
+            directionalLight.shadow.camera.far = 4;
+
+            directionalLight.shadow.bias = - 0.002;
+
         }
-        animate();
+
+        function init() {
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.localClippingEnabled = true;
+            const domElement = document.getElementById('r1')
+            domElement.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+            const aspect = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(20, aspect, 2, 1000);
+            camera.position.set( 0,0,600 );
+            scene.add(camera);
+            // cameraHelper = new THREE.CameraHelper( camera );
+			// scene.add( cameraHelper );
+            // orthoCamera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 1, 2 );
+			// orthoCamera.position.set( 0.5, 0, 1 );
+
+            controlsPerspective = new OrbitControls(camera, renderer.domElement);
+            controlsPerspective.minDistance = 20;
+            controlsPerspective.maxDistance = 2400;
+            controlsPerspective.addEventListener('change', render)
+            
+            // controlsPerspective.enablePan = true;
+            // controlsPerspective.enableDamping = true;
+            scene.add(controlsPerspective);
+           
+            // const controls = new OrbitControls(camera, renderer.domElement);
+            // controlsPerspective.addEventListener('change', render); // use only if there is no animation loop
+            // controls.minDistance = 1;
+            // controls.maxDistance = 40;
+            // controls.enablePan = false;
+
+
+            // lights
+
+            // const ambientLight = new THREE.AmbientLight( 0xffffff, 0.1 );
+            // scene.add( ambientLight );
+
+            // const pointLight = new THREE.HemisphereLight( 0x443333, 0x222233, 2 );
+			// camera.add( pointLight );
+            // const ambientLight = new THREE.AmbientLight( 0xffffff, 0.4 );
+            // ambientLight.position.set( 0, 0, 50 );
+            // scene.add( ambientLight );
+
+            // const spotLight = new THREE.SpotLight( 0xffffff, 0.5 );
+            // spotLight.position.set( 0, 0, -50 );
+            // spotLight.angle = Math.PI / 4;
+            // spotLight.penumbra = 0.1;
+            // spotLight.decay = 2;
+            // spotLight.distance = 200;
+
+            // spotLight.castShadow = true;
+            // spotLight.shadow.mapSize.width = 512;
+            // spotLight.shadow.mapSize.height = 512;
+            // spotLight.shadow.camera.near = 10;
+            // spotLight.shadow.camera.far = 200;
+            // spotLight.shadow.focus = 1;
+
+            // lightHelper = new THREE.SpotLightHelper( spotLight );
+			// scene.add( lightHelper );
+
+            window.addEventListener('resize', onWindowResize);
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            render();
+
+        }
+
+
+        const loader = new STLLoader();
+        await loader.load('/surface.stl', function (geometry) {
+            
+            const material = new THREE.MeshPhongMaterial( { 
+                clearcoatRoughness: 0.8,
+                color: 0x808080,  
+                shininess: 4,
+                transparent: true,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.1,
+                metalness: 0.9,
+                roughness: 0.5,
+								// color: 0x0000ff,
+                opacity: 0.3
+             } );
+			const mesh = new THREE.Mesh( geometry, material );
+
+            // mesh.position.set(-1, 1, -1);
+            // mesh.rotation.set(-Math.PI/2, 0, 0);
+            // mesh.rotation.set(-Math.PI/2, 0, -Math.PI/2);
+            // mesh.rotation.set(-Math.PI/2, 0, 0);
+            mesh.scale.set(-0.95, -0.95, 0.95);
+            // mesh.scale.set( 2,2,2 );
+            // mesh.geometry.computeVertexNormals(true);
+            mesh.material.shading=THREE.SmoothShading
+            // mesh.castShadow = true;
+            // mesh.receiveShadow = true;
+
+            scene.add(mesh);
+
+            render()
+        });
+        // const light1=new THREE.PointLight( 0x443333,  1 );
+        // light1.position.set( 0, 0, -30 );
+        // scene.add(light1);
+        addShadowedLight( 0, 0, -60, 0xffffff, 0.9 );
+		addShadowedLight( 0, 0, 60, 0xffffff, 0.9 );
+        const light = new THREE.AmbientLight( 0x404040, 2 ); // soft white light
+        scene.add( light );
+
+        let nodeCoordinates = null
+        await fetch(node)
+            .then(r => r.text())
+            .then(text => {
+                nodeCoordinates = text;
+            });
+        var nodes = []
+        let n = 0
+        nodeCoordinates.split('\r\n').map((coord, i) => {
+            let each_node = []
+            coord.split('  ').map((c) => {
+                each_node.push(parseFloat(c))
+            })
+            const geometry = new THREE.SphereGeometry(2, 20, 20);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x000000,
+                // metalness: params.roughness,
+                // roughness: params.metalness,
+                // shininess: 200,
+                // envMapIntensity: 1.0,
+                transparent: true,
+                opacity: 0.1
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            sphere.scale.set(1, 1, 1);
+            sphere.position.set(each_node[0], each_node[1], each_node[2])
+            scene.add(sphere)
+            nodes.push(new THREE.Vector3(each_node[0], each_node[1], each_node[2]));
+            // if (n == 3) {
+                
+                // n = 0
+            // }
+            n += 1
+        })
+
+        //LINE
+        // const material = new THREE.LineBasicMaterial({
+        //     color: 0x0000ff,
+        //     linewidth: 10
+        // });
+
+        // const geometry = new THREE.BufferGeometry().setFromPoints(nodes);
+
+        // const line = new THREE.Line(geometry, material);
+        // scene.add(line);
+        var correlation = correlationFunction.calculateCorrelation(this.props.data)
+        // const edges=[];
+        // const boxGeometry=new THREE.BoxGeometry( 0,0,0 );;
+        const degree={
+        }
+        Array(200).fill(1).map((node, i) =>{
+            degree[i]=0
+        })
+        correlation.map((edge)=> {
+            if (edge['value']>params.lowerThreshold && edge['value']<params.upperThreshold){
+                // edges.push([edge['row'], edge['column']])
+                let boxGeometry = new THREE.BoxGeometry( edge['value']/5, edge['value']/5 , 1 );
+                let start, end;
+
+                // const edges=[[1,20],[20,40], [10,30]];
+                start=nodes[edge['row']]
+                end=nodes[edge['column']]
+                degree[edge['row']]+=1
+                degree[edge['column']]+=1
+                var angle = start.angleTo( end ); // radians
+                const object = new THREE.Mesh( boxGeometry, new THREE.MeshPhongMaterial( {color:0x0000ff }) );
+                
+                object.position.copy( start );
+                object.position.lerp( end, 0.5);
+                object.scale.set( 1,  1, start.distanceTo( end ),  );
+                object.lookAt(end );
+                scene.add( object );
+                // edges.map((edge)=> {
+                    
+                // })
+            }
+        })
+
+        nodeCoordinates.split('\r\n').map((coord, i) => {
+            let each_node = []
+            coord.split('  ').map((c) => {
+                each_node.push(parseFloat(c))
+            })
+            const geometry = new THREE.SphereGeometry(degree[i]/4, 20, 20);
+            const material = new THREE.MeshStandardMaterial({
+                color: new THREE.Color("rgb("+colorPresentation[example[i]]['color'][0]+", "+colorPresentation[example[i]]['color'][1]+", "+colorPresentation[example[i]]['color'][2]+")"),
+                // metalness: params.roughness,
+                // roughness: params.metalness,
+                shininess: 200,
+                // envMapIntensity: 1.0
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            sphere.scale.set(1, 1, 1);
+            sphere.position.set(each_node[0], each_node[1], each_node[2])
+            scene.add(sphere)
+            // if (n == 3) {
+                
+                // n = 0
+            // }
+            n += 1
+        })
+
+        const axis1=new THREE.AxesHelper( 10 * 5 )
+        scene.add(axis1);
+
+        
+        render();
+
+        const gui = new dat.GUI();
+
+
+        // gui.add( params, 'upperThreshold', 0, 1 ).step( 0.1 ).onChange( function ( value ) {
+        //     render();
+        // } );
+        const controllerContaineer=document.getElementById('controller')
+        controllerContaineer.appendChild( gui.domElement );
+        function render() {
+            renderer.render(scene, camera);
+        }
     }
 
     componentDidUpdate() {
-        
+
     }
 
     render() {
         return (
             <>
-                <div style={{border: '1px solid #38FFD8', width: "100%",  height:600, display:'block', position:'absolute'}} id='r1'></div>
-                    {/* <script> */}
-                    {/* {
+                <div id='controller'></div>
+                <div style={{ backgroundColor: "#ffffff" }} id='r1'></div>
+                
+                {/* <script> */}
+                {/* {
                 array.map((data)=>{
                   return(
                     <div>{data}</div>
@@ -156,7 +326,7 @@ class BV extends React.Component {
                 })
               } */}
 
-                    {/* </script> */}
+                {/* </script> */}
             </>
         )
     }

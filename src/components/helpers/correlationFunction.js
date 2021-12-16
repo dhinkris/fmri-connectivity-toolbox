@@ -82,7 +82,7 @@ function calculateCorrelation(fileContentArray){
     for (var i = 0; i < 200; i++) {//for every timepoint
         var temp = []
         var splitstring = correlation_array[i]//row
-        for (var x = (i+1); x < 200; x++) {//arrange each ROI in an array as a float
+        for (var x = (i+1); x <= 199; x++) {//arrange each ROI in an array as a float
             finalArray.push({ "row": i, "column": x, "value": splitstring[x] })
             temp.push(splitstring[x])
             count++;
@@ -93,8 +93,6 @@ function calculateCorrelation(fileContentArray){
     //console.log("in correlationFunction")
     //console.log(finalArray)
     return finalArray
-    console.log("Correlation data:")
-    console.log(this.state.data)
 }
 
 module.exports={calculateCorrelation};

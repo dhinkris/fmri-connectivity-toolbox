@@ -20,6 +20,10 @@ class BV extends React.Component {
     }
 
     async componentDidMount() {
+        const data=this.state.data
+        // this.state.data.map((nodes)=> {
+        //     console.log()
+        // })
         let camera, scene, renderer, lightHelper,  cameraHelper, controlsPerspective, cameraOrtho, cameraPerspective;
 
         const params = {
@@ -186,35 +190,40 @@ class BV extends React.Component {
             .then(text => {
                 nodeCoordinates = text;
             });
-        var nodes = []
-        let n = 0
+
+        let nodesVector=[]
+        let nodes = []
         nodeCoordinates.split('\r\n').map((coord, i) => {
             let each_node = []
             coord.split('  ').map((c) => {
                 each_node.push(parseFloat(c))
             })
-            const geometry = new THREE.SphereGeometry(2, 20, 20);
-            const material = new THREE.MeshStandardMaterial({
-                color: 0x0000ff,
-                // metalness: params.roughness,
-                // roughness: params.metalness,
-                shininess: 200,
-                // envMapIntensity: 1.0,
-                // transparent: true,
-                // opacity: 0.1
-            });
-            const sphere = new THREE.Mesh(geometry, material);
-            sphere.scale.set(1, 1, 1);
-            sphere.position.set(each_node[0], each_node[1], each_node[2])
-            scene.add(sphere)
-            nodes.push(new THREE.Vector3(each_node[0], each_node[1], each_node[2]));
-            // if (n == 3) {
-                
-                // n = 0
-            // }
-            n += 1
+            nodes.push(each_node)
+            nodesVector.push(new THREE.Vector3(each_node[0], each_node[1], each_node[2]))
         })
+        function renderNodeCoordinates(nodeVal) {
+            nodeCoordinates.split('\r\n').map((coord, i) => {
+                const geometry = new THREE.SphereGeometry(nodeVal[i]/10, 20, 20);
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0x0000ff,
+                    // metalness: params.roughness,
+                    // roughness: params.metalness,
+                    shininess: 200,
+                    // envMapIntensity: 1.0,
+                    // transparent: true,
+                    // opacity: 0.1
+                });
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.scale.set(1, 1, 1);
+                sphere.position.set(nodes[i][0], nodes[i][1], nodes[i][2])
+                scene.add(sphere)
+                // if (n == 3) {
 
+                // n = 0
+                // }
+            })
+        }
+        renderNodeCoordinates(this.state.data[0].split('  ').slice(0,200))
         //LINE
         // const material = new THREE.LineBasicMaterial({
         //     color: 0x0000ff,
@@ -233,30 +242,32 @@ class BV extends React.Component {
         Array(200).fill(1).map((node, i) =>{
             degree[i]=0
         })
-        correlation.map((edge)=> {
-            if (edge['value']>params.lowerThreshold && edge['value']<params.upperThreshold){
-                // edges.push([edge['row'], edge['column']])
-                let boxGeometry = new THREE.BoxGeometry( edge['value']/4, edge['value']/4 , 1 );
-                let start, end;
 
-                // const edges=[[1,20],[20,40], [10,30]];
-                start=nodes[edge['row']]
-                end=nodes[edge['column']]
-                degree[edge['row']]+=1
-                degree[edge['column']]+=1
-                var angle = start.angleTo( end ); // radians
-                const object = new THREE.Mesh( boxGeometry, new THREE.MeshPhongMaterial( {color:0x0000ff }) );
+     
+        // correlation.map((edge)=> {
+        //     if (edge['value']>params.lowerThreshold && edge['value']<params.upperThreshold){
+        //         // edges.push([edge['row'], edge['column']])
+        //         let boxGeometry = new THREE.BoxGeometry( edge['value']/4, edge['value']/4 , 1 );
+        //         let start, end;
+
+        //         // const edges=[[1,20],[20,40], [10,30]];
+        //         start=nodes[edge['row']]
+        //         end=nodes[edge['column']]
+        //         degree[edge['row']]+=1
+        //         degree[edge['column']]+=1
+        //         // var angle = start.angleTo( end ); // radians
+        //         const object = new THREE.Mesh( boxGeometry, new THREE.MeshPhongMaterial( {color:0x0000ff }) );
                 
-                object.position.copy( start );
-                object.position.lerp( end, 0.5);
-                object.scale.set( 1,  1, start.distanceTo( end ),  );
-                object.lookAt(end );
-                scene.add( object );
-                // edges.map((edge)=> {
+        //         object.position.copy( start );
+        //         object.position.lerp( end, 0.5);
+        //         object.scale.set( 1,  1, start.distanceTo( end ),  );
+        //         object.lookAt(end );
+        //         scene.add( object );
+        //         // edges.map((edge)=> {
                     
-                // })
-            }
-        })
+        //         // })
+        //     }
+        // })
 
         // nodeCoordinates.split('\r\n').map((coord, i) => {
         //     let each_node = []
@@ -284,7 +295,17 @@ class BV extends React.Component {
 
         const axis1=new THREE.AxesHelper( 10 * 5 )
         scene.add(axis1);
-
+        let m=0
+        // function animate(){
+        //     // setInterval(renderNodeCoordinates(data[m].split('  ').slice(0,200)), 1000)
+        //     m+=1
+        //     if (m==50){
+        //         m=0
+        //     }
+        //     requestAnimationFrame( animate );
+            
+        //     render()
+        // }
         
         render();
 

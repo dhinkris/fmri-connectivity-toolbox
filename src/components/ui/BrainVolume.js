@@ -1,5 +1,5 @@
 import React from "react";
-import Model3D from '../visualization/model3D/Model3D'
+import Model3D from '../visualization/model3D/Model3DTimeSeries'
 
 class BrainVolume extends React.Component {
     state={

@@ -20,6 +20,33 @@ function calculateCorrelation(fileContentArray){
             roibase[j].push(timebase[i][j]) 
         }
     }
+    // function partialCorrelation(p1, p2, n){
+    //     let sum_X = 0, sum_Y = 0, sum_XY = 0;
+    //     let squareSum_X = 0, squareSum_Y = 0;
+    
+    //     for (let i = 0; i < n; i++)
+    //     {
+    //         // sum of elements of array X.
+    //         sum_X = sum_X + X[i];
+    
+    //         // sum of elements of array Y.
+    //         sum_Y = sum_Y + Y[i];
+    
+    //         // sum of X[i] * Y[i].
+    //         sum_XY = sum_XY + X[i] * Y[i];
+    
+    //         // sum of square of array elements.
+    //         squareSum_X = squareSum_X + X[i] * X[i];
+    //         squareSum_Y = squareSum_Y + Y[i] * Y[i];
+    //     }
+    
+    //     // use formula for calculating correlation coefficient.
+    //     let corr = (n * sum_XY - sum_X * sum_Y) 
+    //                 / Math.sqrt((n * squareSum_X - sum_X * sum_X) 
+    //                     * (n * squareSum_Y - sum_Y * sum_Y));
+    
+    //     return corr;
+    // }
     function pearsonCorrelation(prefs, p1, p2) {
         // good code
         // for(var i = 0; i<89; i<100)
@@ -82,7 +109,7 @@ function calculateCorrelation(fileContentArray){
     for (var i = 0; i < 200; i++) {//for every timepoint
         var temp = []
         var splitstring = correlation_array[i]//row
-        for (var x = (i+1); x < 200; x++) {//arrange each ROI in an array as a float
+        for (var x = (i+1); x <= 199; x++) {//arrange each ROI in an array as a float
             finalArray.push({ "row": i, "column": x, "value": splitstring[x] })
             temp.push(splitstring[x])
             count++;
@@ -93,8 +120,6 @@ function calculateCorrelation(fileContentArray){
     //console.log("in correlationFunction")
     //console.log(finalArray)
     return finalArray
-    console.log("Correlation data:")
-    console.log(this.state.data)
 }
 
 module.exports={calculateCorrelation};

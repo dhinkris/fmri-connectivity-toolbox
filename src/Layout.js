@@ -75,17 +75,17 @@ class Layout extends React.Component {
                                 </Grid>
                             </Grid>
                         </Box>
-                        <Grid container spacing={2}>
+                        {/* <Grid container spacing={2}>
                             <Grid item xs={8}>
                                 <Timeseries data={this.state.data} />
                             </Grid>
                             <Grid item xs={4}>
                                 <Correlation data={this.state.data} />
                             </Grid>
-                            <Grid item xs={8}>
-                                <Circos data={this.state.data}/>
-                            </Grid>
-                        </Grid>
+                            <Grid item xs={6}>
+                                <Circos data={this.state.data}/> 
+                            </Grid> 
+                        </Grid> */}
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <BrainVolume data={this.state.data}/>

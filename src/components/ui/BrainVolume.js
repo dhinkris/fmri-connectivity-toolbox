@@ -1,5 +1,5 @@
 import React from "react";
-import Model3D from '../visualization/model3D/Model3D'
+import Model3D from '../visualization/model3D/Model3DTimeSeries'
 
 class BrainVolume extends React.Component {
     state={
@@ -16,10 +16,10 @@ class BrainVolume extends React.Component {
             })
         }
     }
-    
+
     render(){
-        const { data } = this.state
-        return(
+        const {data} = this.props
+        return (
             <>
                 {
                     data && data.length>0? <Model3D data={data} />: null

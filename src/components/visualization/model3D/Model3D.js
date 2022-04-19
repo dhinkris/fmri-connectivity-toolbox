@@ -242,7 +242,7 @@ class BV extends React.Component {
         correlation.map((edge)=> {
             if (edge['value']>params.lowerThreshold && edge['value']<params.upperThreshold){
                 // edges.push([edge['row'], edge['column']])
-                let boxGeometry = new THREE.BoxGeometry( edge['value']/4, edge['value']/4 , 1 );
+                let boxGeometry = new THREE.BoxGeometry( edge['value']/2, edge['value']/2 , 1 );
                 let start, end;
 
                 // const edges=[[1,20],[20,40], [10,30]];

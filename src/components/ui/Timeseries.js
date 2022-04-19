@@ -1,5 +1,5 @@
 import React from "react";
-import Heatmap from '../visualization/chart/HeatMap';
+import StackedLinePlot from '../visualization/chart/StackedLinePlot';
 import * as d3 from 'd3';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -18,13 +18,38 @@ class Timeseries extends React.Component {
     updateTimeSeries=()=>{
         this.setState({ loading: true })
         let fileContentArray = this.props.data
-        var finalArray = []
-        for (var i = 0; i < fileContentArray.length; i++) {//for every timepoint
-            var splitstring = fileContentArray[i].split('  ')//split ROIs
-            for (var x = 0; x < splitstring.length - 2; x++) {//arrange each ROI in an array as a float
-                finalArray.push({ "group": "r" + i, variable: "c" + x, "value": parseFloat(splitstring[x]) })
+        var col = []
+        let finalArray=[]
+        for (var i = 0; i < fileContentArray.length; i++) {
+            var splitstring = fileContentArray[i].split('  ')
+            let row=[]
+            for (var x = 0; x < splitstring.length - 1; x++) {
+                row.push(parseFloat(splitstring[x]))
             }
+            col.push(row)
         }
+        
+        const data=col[0].map((_, colIndex) => col.map(row => row[colIndex]));
+        // const data=col
+        const min=Math.min(...col[0])
+        const max=Math.max(...col[0])
+        console.log(data)
+        data.map((row, rowIndex) =>{
+            let newObj={}
+            row.map((col, colIndex)=>{
+                newObj["t"+ colIndex] = (col-min)/(max-min)
+            })
+            finalArray.push(newObj)
+        })
+        // for (var i = 0; i < fileContentArray.length; i++) {//for every timepoint
+        //     var splitstring = fileContentArray[i].split('  ')//split ROIs
+        //     var newObj={}
+        //     for (var x = 0; x < splitstring.length - 2; x++) {//arrange each ROI in an array as a float
+        //         // finalArray.push({ "group": "r" + i, variable: "c" + x, "value": c })
+        //         newObj["group"+x]=splitstring[x]
+        //     }
+        //     finalArray.push(newObj)
+        // }
         const minVal=Math.min(...finalArray.map(data => data.value));
         const maxVal=Math.max(...finalArray.map(data => data.value));
         console.log(minVal, maxVal);    
@@ -35,7 +60,7 @@ class Timeseries extends React.Component {
         })
     }
     componentDidMount() {
-        this.updateTimeSeries()
+        // this.updateTimeSeries()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -67,7 +92,7 @@ class Timeseries extends React.Component {
                             getAriaValueText={valuetext}
                         />
                     </Box>              
-                    <Heatmap
+                    <StackedLinePlot
                         data={this.state.data}
                         width={1000}
                         height={500}

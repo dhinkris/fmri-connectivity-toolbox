@@ -8,7 +8,7 @@ import { range } from 'd3-array';
 import { HEATMAP, TRACK_TYPES } from 'react-circos/build/tracks'
 import correlationFunction from "../../helpers/correlationFunction"
 import dictionaryForEach from "../../helpers/dictionaryForEach"
-import { degree, betweeness_centrality} from "../../helpers/metrics"
+import { degree, betweeness_centrality } from "../../helpers/metrics"
 const size = 800;//size of circle
 const start_chord = 0.45//where the chords start on the edges(0-1)
 const end_chord = .55//where the chords end on the edges(0-1)
@@ -45,7 +45,7 @@ class ChordsTest extends React.Component {
     }//101 1s, 29 2s, 55 3s, 12 4s, 3 5s*/
     // { "len": 31, "color": "#8dd3c7", "label": "January", "id": "january" },
     var myColor = d3.scaleLinear()
-      .range(["#0000ff", "#00ff00"])
+      .range(["#8dd3c7", "#0000ff"])
       .domain([1, 5])
     _layout.push({ "len": 101, "color": myColor(1), "label": "1", "id": "1" })//each cell in layout is a region, with id
     _layout.push({ "len": 29, "color": myColor(2), "label": "2", "id": "2" })//len represents how many 'nodes' will be in the region
@@ -186,17 +186,17 @@ class ChordsTest extends React.Component {
                   //tooltipContent: {"block_id":"id "},
                 },
               },
-            {
-              type: HEATMAP,
-              data: degrees,
-              config: {
-                innerRadius: 0.90,
-                outerRadius: 0.98,
-                logScale: false,
-                color: 'YlGnBu',
-                //tooltipContent: {"block_id":"id "},
-              },
-            }]}
+              {
+                type: HEATMAP,
+                data: degrees,
+                config: {
+                  innerRadius: 0.90,
+                  outerRadius: 0.98,
+                  logScale: false,
+                  color: 'YlGnBu',
+                  //tooltipContent: {"block_id":"id "},
+                },
+              }]}
               size={900}
             /> : null
         }
